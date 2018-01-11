@@ -1,0 +1,8 @@
+name: womh
+version: 0.0.1
+author: kid2407
+main: de.kid2407.womh.WomhPlugin
+commands:
+      womh:
+              description: base command for all womh related things
+              usage: <command> [options]
