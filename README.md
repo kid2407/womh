@@ -10,7 +10,7 @@ An implementation of the game *Werewolves of Millers Hollow* as a Spigot-Plugin
 
 #### Implemented Features
 
-* Nothing Yet
+* Create a game and invite players
 
 #### Yet to be implemented
 

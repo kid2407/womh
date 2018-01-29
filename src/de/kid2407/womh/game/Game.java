@@ -4,15 +4,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Created by Tobias Franz on 12.01.2018.
  */
 public class Game {
 
-    private ArrayList<Player> players;
-    private Map<Role, ArrayList<Player>> roles;
+    private ArrayList<Player> players = new ArrayList<>();
+    private HashMap<Role, ArrayList<Player>> roles = new HashMap<>();
     private Player creator;
     private boolean firstnight = true;
 

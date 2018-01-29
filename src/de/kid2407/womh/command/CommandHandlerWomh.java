@@ -2,6 +2,7 @@ package de.kid2407.womh.command;
 
 import de.kid2407.womh.WomhPlugin;
 import de.kid2407.womh.game.Game;
+import me.rayzr522.jsonmessage.JSONMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -34,15 +35,20 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
                     player.sendMessage("Es gibt bereits ein Spiel!");
                 }
             }
-            if (args[0].equals("invite")){
-                player.sendMessage("Du wurdest zu einem Spiel eingeladen! Schreibe " + "{\"text\":\"test\"}" + ChatColor.WHITE + "zum beitreten!");
+            if (args[0].equals("invite")) {
+                JSONMessage.create("Du wurdest zu eine Runde eingeladen! benutze ").then("/womh join").color(ChatColor.DARK_GREEN).runCommand("/womh join").then(" um beizutreten.").send(player);
             }
-            if (args[0].equals("join")){
-                if (WomhPlugin.game.isPlayerInGame(player)) {
-                    player.sendMessage("Du bist bereits in dieser Runde!");
-                } else{
-                  WomhPlugin.game.addPlayer(player);
-                  player.sendMessage("Du bist erfolgreich dem Spiel beigetreten!");
+
+            if (args[0].equals("join")) {
+                if (WomhPlugin.game != null) {
+                    if (WomhPlugin.game.isPlayerInGame(player)) {
+                        player.sendMessage("Du bist bereits in dieser Runde!");
+                    } else {
+                        WomhPlugin.game.addPlayer(player);
+                        player.sendMessage("Du bist erfolgreich dem Spiel beigetreten!");
+                    }
+                } else {
+                    player.sendMessage("Es existiert kein Spiel, dem beigetreten werden könnte!");
                 }
             }
         }
