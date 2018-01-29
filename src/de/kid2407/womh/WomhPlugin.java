@@ -1,6 +1,7 @@
 package de.kid2407.womh;
 
 import de.kid2407.womh.command.CommandHandlerWomh;
+import de.kid2407.womh.game.Game;
 import de.kid2407.womh.util.Constants;
 import de.kid2407.womh.util.WomhLogger;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -9,6 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Created by Tobias Franz on 10.01.2018.
  */
 public class WomhPlugin extends JavaPlugin {
+
+    public static Game game;
 
     @Override
     public void onEnable() {

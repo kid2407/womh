@@ -1,6 +1,7 @@
 package de.kid2407.womh.game;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class Game {
 
     public boolean startGame() {
         if (players.size() > 0) {
-            org.bukkit.entity.Player player = Bukkit.getServer().getPlayer(creator.getName());
+            Player player = Bukkit.getServer().getPlayer(creator.getName());
             player.sendMessage("Das Spiel wurde gestartet.");
             return true;
         } else {
