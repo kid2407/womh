@@ -2,6 +2,7 @@ package de.kid2407.womh.command;
 
 import de.kid2407.womh.WomhPlugin;
 import de.kid2407.womh.game.Game;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,11 +20,10 @@ import java.util.List;
  */
 public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
 
-    private static final String[] COMMANDS = {"create", "invite", "start", "pause", "unpause"};
+    private static final String[] COMMANDS = {"create", "invite", "join", "start", "pause", "unpause"};
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        commandSender.sendMessage("Success!");
         if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
             if (args[0].equals("create")) {
@@ -32,6 +32,17 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
                     player.sendMessage("Das Spiel wurde erstellt! Lade Leute mit /womh invite ein!");
                 } else {
                     player.sendMessage("Es gibt bereits ein Spiel!");
+                }
+            }
+            if (args[0].equals("invite")){
+                player.sendMessage("Du wurdest zu einem Spiel eingeladen! Schreibe " + "{\"text\":\"test\"}" + ChatColor.WHITE + "zum beitreten!");
+            }
+            if (args[0].equals("join")){
+                if (WomhPlugin.game.isPlayerInGame(player)) {
+                    player.sendMessage("Du bist bereits in dieser Runde!");
+                } else{
+                  WomhPlugin.game.addPlayer(player);
+                  player.sendMessage("Du bist erfolgreich dem Spiel beigetreten!");
                 }
             }
         }

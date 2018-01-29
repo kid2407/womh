@@ -34,6 +34,10 @@ public class Game {
         this.players.add(player);
     }
 
+    public boolean isPlayerInGame(Player player) {
+        return this.players.contains(player);
+    }
+
     public int getPlayerCount() {
         return this.players.size();
     }
