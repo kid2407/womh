@@ -51,6 +51,20 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
                     player.sendMessage("Es existiert kein Spiel, dem beigetreten werden könnte!");
                 }
             }
+
+            if (args[0].equalsIgnoreCase("start")) {
+                if (WomhPlugin.game != null) {
+                    WomhPlugin.game.generateCreatorBook();
+                } else {
+                    player.sendMessage("Kein Spiel vorhanden!");
+                }
+            }
+
+            if (args[0].equalsIgnoreCase("kill")) {
+                if (WomhPlugin.game != null) {
+                    WomhPlugin.game.killPlayer(player);
+                }
+            }
         }
         return true;
     }
