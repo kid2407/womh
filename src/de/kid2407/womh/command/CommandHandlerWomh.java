@@ -4,7 +4,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -21,26 +20,23 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (commandSender instanceof Player) {
-            Player player = (Player) commandSender;
-            player.setHealthScale(player.getHealthScale() + 10d);
-            player.sendMessage("Success!");
-
-            return true;
-        }
-
-        return false;
+        commandSender.sendMessage("Success!");
+        return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String alias, String[] args) {
-        //convert to list
-        final List<String> completions = new ArrayList<>(Arrays.asList(COMMANDS));
-        //copy matches of first argument from list
-        StringUtil.copyPartialMatches(args[0], Arrays.asList(COMMANDS), completions);
-        // sorting
-        Collections.sort(completions);
+        if (args.length == 1) {
+            //convert to list
+            List<String> completions = new ArrayList<>();
+            //copy matches of first argument from list
+            StringUtil.copyPartialMatches(args[0], Arrays.asList(COMMANDS), completions);
+            // sorting
+            Collections.sort(completions);
 
-        return completions;
+            return completions;
+        }
+
+        return new ArrayList<>();
     }
 }
