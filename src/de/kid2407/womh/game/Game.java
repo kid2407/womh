@@ -70,14 +70,14 @@ public class Game {
     }
 
     public void generateCreatorBook() {
-        ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+        ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
         BookMeta bookMeta = (BookMeta) book.getItemMeta();
         String page = "Liste aller Spieler:\n\n";
         for (Player womhPlayer : WomhPlugin.game.getPlayers()) {
             if (this.isPlayerAlive(womhPlayer)) {
-                page += ChatColor.GREEN.toString() + womhPlayer.getDisplayName() + ChatColor.RESET + "\n";
+                page += ChatColor.DARK_GREEN.toString() + womhPlayer.getDisplayName() + ChatColor.RESET + "\n";
             } else {
-                page += ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + womhPlayer.getDisplayName() + ChatColor.RESET + "\n";
+                page += ChatColor.DARK_RED.toString() + ChatColor.STRIKETHROUGH + womhPlayer.getDisplayName() + ChatColor.RESET + "\n";
             }
         }
         bookMeta.addPage(page);
@@ -86,6 +86,11 @@ public class Game {
         bookMeta.setPages(page);
 
         book.setItemMeta(bookMeta);
+
+        WomhPlugin.game.getCreator().getInventory().remove(Material.WRITTEN_BOOK);
+
+        WomhPlugin.game.getCreator().updateInventory();
+
         WomhPlugin.game.getCreator().getInventory().addItem(book);
     }
 }
