@@ -9,6 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import java.util.List;
  */
 public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
 
-    private static final String[] COMMANDS = {"create", "invite", "join", "start", "pause", "unpause"};
+    private static final String[] COMMANDS = {"create", "invite", "join", "leave", "addBlindness", "removeBlindness", "night", "start", "pause", "unpause"};
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
@@ -64,6 +66,25 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
                 if (WomhPlugin.game != null) {
                     WomhPlugin.game.killPlayer(player);
                 }
+            }
+            if (args[0].equals("leave")) {
+                if (WomhPlugin.game.isPlayerInGame(player)) {
+                    WomhPlugin.game.removePlayer(player);
+                    player.sendMessage("Du hat das Spiel erfolgreich verlassen!");
+                } else{
+                    player.sendMessage("Du bist in keinem Spiel!");
+                }
+            }
+            if (args[0].equals("night")) {
+                for (Player womhplayer :WomhPlugin.game.getPlayers()) {
+                    womhplayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
+                }
+            }
+            if (args[0].equals("addBlindness")) {
+                WomhPlugin.game.addBlindness(player);
+            }
+            if (args[0].equals("removeBlindness")) {
+                WomhPlugin.game.removeBlindness(player);
             }
         }
         return true;

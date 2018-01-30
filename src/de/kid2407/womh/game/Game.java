@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +41,18 @@ public class Game {
     public void addPlayer(Player player) {
         this.players.add(player);
         this.playersAlive.add(player);
+    }
+
+    public void removePlayer(Player player) {
+        this.players.remove(player);
+    }
+
+    public void addBlindness(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
+    }
+
+    public void removeBlindness(Player player) {
+        player.removePotionEffect(PotionEffectType.BLINDNESS);
     }
 
     public boolean isPlayerInGame(Player player) {
