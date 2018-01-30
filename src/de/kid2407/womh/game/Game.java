@@ -1,8 +1,8 @@
 package de.kid2407.womh.game;
 
 import de.kid2407.womh.WomhPlugin;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,13 +28,23 @@ public class Game {
         this.creator = creator;
     }
 
-    public boolean startGame() {
-        if (players.size() > 0) {
-            Player player = Bukkit.getServer().getPlayer(creator.getName());
-            player.sendMessage("Das Spiel wurde gestartet.");
-            return true;
+    public void prepareGame() {
+        Location creatorLocation = this.getCreator().getLocation();
+        creatorLocation.add(0, -1, 0);
+        int radius = 16;
+        GameAreaGenerator.generateBaseCircle(creatorLocation, Material.OBSIDIAN, radius);
+        GameAreaGenerator.generatePlayerPositions(players.size(), creatorLocation, radius - 2);
+        creatorLocation.getBlock().setType(Material.STAINED_GLASS);
+        creatorLocation.getBlock().setData((byte) 14);
+
+    }
+
+    public void startGame() {
+        Player creator = this.getCreator();
+        if (this.players.size() > 0) {
+            creator.sendMessage("Das Spiel wurde gestartet.");
         } else {
-            return false;
+            creator.sendMessage("Es sind nicht genügend Spieler vorhanden.");
         }
     }
 

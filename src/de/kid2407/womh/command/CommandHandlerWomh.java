@@ -3,7 +3,6 @@ package de.kid2407.womh.command;
 import de.kid2407.womh.WomhPlugin;
 import de.kid2407.womh.game.Game;
 import me.rayzr522.jsonmessage.JSONMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -66,6 +65,8 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
             if (args[0].equalsIgnoreCase("start")) {
                 if (WomhPlugin.game != null) {
                     WomhPlugin.game.generateCreatorBook();
+                    WomhPlugin.game.prepareGame();
+                    WomhPlugin.game.startGame();
                 } else {
                     player.sendMessage("Kein Spiel vorhanden!");
                 }
@@ -80,21 +81,21 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
                 if (WomhPlugin.game.isPlayerInGame(player)) {
                     WomhPlugin.game.removePlayer(player);
                     player.sendMessage("Du hat das Spiel erfolgreich verlassen!");
-                } else{
+                } else {
                     player.sendMessage("Du bist in keinem Spiel!");
                 }
             }
             if (args[0].equals("night")) {
-                for (Player womhplayer :WomhPlugin.game.getPlayers()) {
+                for (Player womhplayer : WomhPlugin.game.getPlayers()) {
                     womhplayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
-                    Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "time set 18000");
                 }
+                player.getWorld().setTime(18000);
             }
             if (args[0].equals("day")) {
-                for (Player womhplayer :WomhPlugin.game.getPlayers()) {
-                    womhplayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
-                    Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "time set 6000");
+                for (Player womhplayer : WomhPlugin.game.getPlayers()) {
+                    womhplayer.removePotionEffect(PotionEffectType.BLINDNESS);
                 }
+                player.getWorld().setTime(6000);
             }
             if (args[0].equals("addBlindness")) {
                 WomhPlugin.game.addBlindness(player);
