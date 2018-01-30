@@ -45,6 +45,7 @@ public class Game {
 
     public void removePlayer(Player player) {
         this.players.remove(player);
+        this.playersAlive.remove(player);
     }
 
     public void addBlindness(Player player) {

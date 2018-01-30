@@ -3,6 +3,7 @@ package de.kid2407.womh.command;
 import de.kid2407.womh.WomhPlugin;
 import de.kid2407.womh.game.Game;
 import me.rayzr522.jsonmessage.JSONMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
 
-    private static final String[] COMMANDS = {"create", "invite", "join", "leave", "addBlindness", "removeBlindness", "night", "start", "pause", "unpause"};
+    private static final String[] COMMANDS = {"addBlindness", "create", "delete", "day", "invite", "join", "leave", "removePlayer", "removeBlindness", "night", "unpause", "pause", "start"};
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
@@ -35,6 +36,14 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
                     player.sendMessage("Das Spiel wurde erstellt! Lade Leute mit /womh invite ein!");
                 } else {
                     player.sendMessage("Es gibt bereits ein Spiel!");
+                }
+            }
+            if (args[0].equals("delete")) {
+                if (WomhPlugin.game == null) {
+                    player.sendMessage("Es gibt kein Spiel!");
+                } else {
+                    WomhPlugin.game = null;
+                    player.sendMessage("Das Spiel wurde erfolgreich gelöscht!");
                 }
             }
             if (args[0].equals("invite")) {
@@ -78,6 +87,13 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
             if (args[0].equals("night")) {
                 for (Player womhplayer :WomhPlugin.game.getPlayers()) {
                     womhplayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
+                    Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "time set 18000");
+                }
+            }
+            if (args[0].equals("day")) {
+                for (Player womhplayer :WomhPlugin.game.getPlayers()) {
+                    womhplayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
+                    Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "time set 6000");
                 }
             }
             if (args[0].equals("addBlindness")) {
@@ -85,6 +101,9 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
             }
             if (args[0].equals("removeBlindness")) {
                 WomhPlugin.game.removeBlindness(player);
+            }
+            if (args[0].equals("removePlayer")) {
+                WomhPlugin.game.removePlayer(player);
             }
         }
         return true;
