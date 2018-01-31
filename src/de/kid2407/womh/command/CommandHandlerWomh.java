@@ -3,6 +3,7 @@ package de.kid2407.womh.command;
 import de.kid2407.womh.WomhPlugin;
 import de.kid2407.womh.game.Game;
 import me.rayzr522.jsonmessage.JSONMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -46,16 +47,32 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
                 }
             }
             if (args[0].equals("invite")) {
-                JSONMessage.create("Du wurdest zu eine Runde eingeladen! benutze ").then("/womh join").color(ChatColor.DARK_GREEN).runCommand("/womh join").then(" um beizutreten.").send(player);
+                if (player.getDisplayName() == WomhPlugin.game.getCreator().getDisplayName()) {
+                    if (args.length == 2) {
+                        if (WomhPlugin.game.invite(args[1])) {
+                            player.sendMessage("Wurde erfolgreich eingeladen!");
+                        } else{
+                            player.sendMessage("Dieser Spieler ist nicht online!");
+                        }
+                    } else{
+                        player.sendMessage("Es wurde kein Spielername angegeben!");
+                    }
+                } else {
+                    player.sendMessage("Da du dieses Spiel nicht erstellt hast, darfst du niemanden einladen!");
+                }
             }
 
             if (args[0].equals("join")) {
                 if (WomhPlugin.game != null) {
-                    if (WomhPlugin.game.isPlayerInGame(player)) {
-                        player.sendMessage("Du bist bereits in dieser Runde!");
+                    if (WomhPlugin.game.isPlayerInvited(player)) {
+                        if (WomhPlugin.game.isPlayerInGame(player)) {
+                            player.sendMessage("Du bist bereits in dieser Runde!");
+                        } else {
+                            WomhPlugin.game.addPlayer(player);
+                            player.sendMessage("Du bist erfolgreich dem Spiel beigetreten!");
+                        }
                     } else {
-                        WomhPlugin.game.addPlayer(player);
-                        player.sendMessage("Du bist erfolgreich dem Spiel beigetreten!");
+                        player.sendMessage("Du bist nicht eingeladen!");
                     }
                 } else {
                     player.sendMessage("Es existiert kein Spiel, dem beigetreten werden könnte!");
@@ -87,13 +104,17 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
             }
             if (args[0].equals("night")) {
                 for (Player womhplayer : WomhPlugin.game.getPlayers()) {
+                    womhplayer.setWalkSpeed(0);
+                    womhplayer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, -5));
                     womhplayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1));
                 }
                 player.getWorld().setTime(18000);
             }
             if (args[0].equals("day")) {
                 for (Player womhplayer : WomhPlugin.game.getPlayers()) {
+                    womhplayer.setWalkSpeed(0.2f);
                     womhplayer.removePotionEffect(PotionEffectType.BLINDNESS);
+                    womhplayer.removePotionEffect(PotionEffectType.JUMP);
                 }
                 player.getWorld().setTime(6000);
             }

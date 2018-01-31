@@ -1,6 +1,8 @@
 package de.kid2407.womh.game;
 
 import de.kid2407.womh.WomhPlugin;
+import me.rayzr522.jsonmessage.JSONMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 public class Game {
 
     private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> invitedplayers = new ArrayList<>();
     private ArrayList<Player> playersAlive = new ArrayList<>();
     private HashMap<Role, ArrayList<Player>> roles = new HashMap<>();
     private Player creator;
@@ -33,7 +36,7 @@ public class Game {
         creatorLocation.add(0, -1, 0);
         int radius = 16;
         GameAreaGenerator.generateBaseCircle(creatorLocation, Material.OBSIDIAN, radius);
-        GameAreaGenerator.generatePlayerPositions(players.size(), creatorLocation, radius - 2);
+        GameAreaGenerator.generatePlayerPositions(players, creatorLocation, radius - 2);
         creatorLocation.getBlock().setType(Material.STAINED_GLASS);
         creatorLocation.getBlock().setData((byte) 14);
 
@@ -41,10 +44,29 @@ public class Game {
 
     public void startGame() {
         Player creator = this.getCreator();
-        if (this.players.size() > 0) {
+        if (this.players.size() > 3) {
             creator.sendMessage("Das Spiel wurde gestartet.");
         } else {
             creator.sendMessage("Es sind nicht genügend Spieler vorhanden.");
+        }
+    }
+
+    public boolean invite(String player) {
+        Player invitedplayer = Bukkit.getServer().getPlayer(player);
+        if (invitedplayer == null) {
+            return false;
+        }
+
+        if (invitedplayer.getDisplayName() == creator.getDisplayName()) {
+            creator.sendMessage("Der Spielleiter darf sich nicht selber einladen!");
+            return false;
+        }
+        if (Bukkit.getServer().getOnlinePlayers().contains(invitedplayer)) {
+            JSONMessage.create("Du wurdest zu eine Runde eingeladen! benutze ").then("/womh join").color(ChatColor.DARK_GREEN).runCommand("/womh join").then(" um beizutreten.").send(invitedplayer);
+            this.invitedplayers.add(invitedplayer);
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -72,6 +94,10 @@ public class Game {
 
     public boolean isPlayerAlive(Player player) {
         return playersAlive.contains(player);
+    }
+
+    public boolean isPlayerInvited(Player player) {
+        return invitedplayers.contains(player);
     }
 
     public int getPlayerCount() {

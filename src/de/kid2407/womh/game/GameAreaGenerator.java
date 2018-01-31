@@ -3,6 +3,9 @@ package de.kid2407.womh.game;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 /**
  * Created by Tobias Franz on 30.01.2018.
@@ -29,7 +32,8 @@ public class GameAreaGenerator {
      * @param center Position des Spielleiters bei starten
      * @param radius Radius des Spielfeldes
      */
-    public static void generatePlayerPositions(int playercount, Location center, int radius) {
+    public static void generatePlayerPositions(ArrayList<Player> players, Location center, int radius) {
+        int playercount = players.size();
         int centerX = center.getBlockX();
         int centerY = center.getBlockY();
         int centerZ = center.getBlockZ();
@@ -39,6 +43,7 @@ public class GameAreaGenerator {
             int currentX = centerX + (int) (radius * Math.cos(Math.toRadians((double) (270 - angle * i))));
             int currentZ = centerZ + (int) (radius * Math.sin(Math.toRadians((double) (270 - angle * i))));
             Location playerLocation = new Location(center.getWorld(), currentX, centerY, currentZ);
+            players.get(i).teleport(playerLocation);
             System.out.println("Wert von i: " + i);
             playerLocation.getBlock().setType(Material.GLOWSTONE);
         }
