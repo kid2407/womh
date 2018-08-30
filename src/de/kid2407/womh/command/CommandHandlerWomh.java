@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
 
-    private static final String[] COMMANDS = {"addBlindness", "create", "delete", "day", "invite", "join", "leave", "removePlayer", "removeBlindness", "night", "unpause", "pause", "start"};
+    private static final String[] COMMANDS = {"addBlindness", "allowInvite", "create", "delete", "day", "invite", "join", "leave", "removePlayer", "removeBlindness", "night", "unpause", "pause", "start", "votekill", "voteprotect"};
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
@@ -59,6 +59,12 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
                     }
                 } else {
                     player.sendMessage("Da du dieses Spiel nicht erstellt hast, darfst du niemanden einladen!");
+                }
+            }
+
+            if (args[0].equals("allowInvite")) {
+                if (player.getDisplayName() == WomhPlugin.game.getCreator().getDisplayName()) {
+
                 }
             }
 
@@ -126,6 +132,9 @@ public class CommandHandlerWomh implements CommandExecutor, TabCompleter {
             }
             if (args[0].equals("removePlayer")) {
                 WomhPlugin.game.removePlayer(player);
+            }
+            if (args[0].equals("votekill")) {
+                WomhPlugin.game.votekill(args[1]);
             }
         }
         return true;

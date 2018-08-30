@@ -28,7 +28,7 @@ public class GameAreaGenerator {
     }
 
     /**
-     * @param playercount Anzahl der Mitspieler
+     * @param players Liste der Mitspieler
      * @param center Position des Spielleiters bei starten
      * @param radius Radius des Spielfeldes
      */
@@ -43,6 +43,7 @@ public class GameAreaGenerator {
             int currentX = centerX + (int) (radius * Math.cos(Math.toRadians((double) (270 - angle * i))));
             int currentZ = centerZ + (int) (radius * Math.sin(Math.toRadians((double) (270 - angle * i))));
             Location playerLocation = new Location(center.getWorld(), currentX, centerY, currentZ);
+            playerLocation.setY(playerLocation.getY() +1.5d);
             players.get(i).teleport(playerLocation);
             System.out.println("Wert von i: " + i);
             playerLocation.getBlock().setType(Material.GLOWSTONE);

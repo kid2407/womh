@@ -11,6 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +48,7 @@ public class Game {
 
     public void startGame() {
         Player creator = this.getCreator();
-        if (this.players.size() > 3) {
+        if (this.players.size() >= 1) {
             creator.sendMessage("Das Spiel wurde gestartet.");
         } else {
             creator.sendMessage("Es sind nicht genügend Spieler vorhanden.");
@@ -78,6 +82,31 @@ public class Game {
     public void removePlayer(Player player) {
         this.players.remove(player);
         this.playersAlive.remove(player);
+    }
+
+    public void votekill(String playername) {
+        for (Player player : this.playersAlive) {
+            if (player.getScoreboard() == null || (player.getScoreboard() != null && player.getScoreboard().getObjective("Killvotes") == null)) {
+              player = addScoreboardToPlayer(player);
+            }
+            Objective objective = player.getScoreboard().getObjective("Killvotes");
+            Score score = objective.getScore(playername);
+            if (!score.isScoreSet()) {
+                score.setScore(1);
+            }
+            else{
+                score.setScore(score.getScore() + 1);
+            }
+        }
+    }
+
+    public Player addScoreboardToPlayer(Player player) {
+        Scoreboard killvote = Bukkit.getScoreboardManager().getNewScoreboard();
+        Objective killvotes = killvote.registerNewObjective("Killvotes", "dummy");
+        killvotes.setDisplaySlot(DisplaySlot.SIDEBAR);
+        killvotes.setDisplayName("Who shall die?");
+        player.setScoreboard(killvote);
+        return player;
     }
 
     public void addBlindness(Player player) {
